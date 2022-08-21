@@ -6,3 +6,4 @@ This is a repository of standalone scripts used to generate tinydns config for u
 * tinysshfp.py - generate SSHFP records from ssh-keygen output
 * tinysvcb.py - generate HTTPS/SVCB record type
 * tinysrv.py - generate SRV record type
+* tinyuri.py - generate URI record type
