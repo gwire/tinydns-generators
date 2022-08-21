@@ -5,4 +5,4 @@ This is a repository of standalone scripts used to generate tinydns config for u
 * tinyipv6.py - generate AAAA record type
 * tinysshfp.py - generate SSHFP records from ssh-keygen output
 * tinysvcb.py - generate HTTPS/SVCB record type
-
+* tinysrv.py - generate SRV record type
