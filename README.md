@@ -7,3 +7,4 @@ This is a repository of standalone scripts used to generate tinydns config for u
 * tinysvcb.py - generate HTTPS/SVCB record type
 * tinysrv.py - generate SRV record type
 * tinyuri.py - generate URI record type
+* tinyloc.py - generate LOC record type
