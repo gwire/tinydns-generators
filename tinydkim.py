@@ -49,11 +49,19 @@ def nboInt( length, number ):
     intbytes = int(number).to_bytes(length, "big")
     return( intbytes )
 
+def tinyTxtRecord( domain, record, ttl ):
+    output = "'"
+    output += tinyBytes( bytes(domain, "ascii") )
+    output += ":"
+    output += tinyBytes( bytes(record, "ascii"))
+    output += ":" + ttl
+    return( output )
+
 def tinyDkimRecord( domain, record, ttl ):
     output = ":"
     output += tinyBytes( bytes(domain, "ascii") )
     output += ":16:"
-    output += tinyBytes ( nboInt(1, len(record)) )
+    output += "\\{0:03o}".format( len(record) )
     output += tinyBytes( bytes(record, "ascii"))
     output += ":" + ttl
     return( output )
@@ -72,7 +80,7 @@ def dnsTxtRecord( domain, record, ttl ):
     output = domain + ". " + ttl + " IN TXT " +  dnsQuotedText( record );
     return( output )
 
-opts, args = getopt.getopt(sys.argv[1:],"hs:d:t:l:b",["selector=","domain=","hash=","testing=","ttl=","bind"])
+opts, args = getopt.getopt(sys.argv[1:],"hs:d:t:l:bx",["selector=","domain=","hash=","testing=","ttl=","bind","text"])
 for opt, arg in opts:
     if opt == '-h':
         print('Usage: tinydkim.py -s selector -d example.com -t y < pubkey.pem')
@@ -87,6 +95,8 @@ for opt, arg in opts:
         opt_t = arg
     elif opt in ("-l", "--ttl"):
         ttl = arg
+    elif opt in ("-x", "--text"):
+        text_record = 1
     elif opt in ("-b", "--bind"):
         bind = 1
 
@@ -101,7 +111,11 @@ if opt_t:
 
 fqdn = selector + "._domainkey." +  domain
 
-line = tinyDkimRecord( fqdn, rdata, ttl )
+if text_record:
+    line = tinyTxtRecord( fqdn, rdata, ttl )
+else:
+    line = tinyDkimRecord( fqdn, rdata, ttl )
+
 sys.stdout.write( line + "\n")
 
 ## optionally output the format used by lookup tools for comparison
